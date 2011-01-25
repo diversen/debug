@@ -143,12 +143,13 @@ class debug {
             print "<a name=\"main_settings\">Main Settings</a>";
             if ($_SERVER['REMOTE_ADDR'] == get_module_ini('debug_allow_ip')){
                 html_show_array(register::$vars['coscms_main']);
+                print "<a name=\"module_settings\">Module Settings</a>";
+                html_show_array(register::$vars['coscms_main']['module']);
             }
             
             print "<a name=\"sql\">SQL</a>";
             html_show_array(db::getDebug());
-            print "<a name=\"module_settings\">Module Settings</a>";
-            html_show_array(register::$vars['coscms_main']['module']);
+
             print "<a name=\"server\">Server Info</a>";
             html_show_array($_SERVER);
 
