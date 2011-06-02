@@ -113,8 +113,9 @@ class debug {
     public function runLevel($level){
         $str = '';
         if ($level == 6){
-            $ini = moduleLoader::getModuleIniSettings('debug');
-            if (empty($ini['debug'])){
+            //$do_debug = get_module_ini('debug');
+            if (!get_module_ini('debug')){
+                echo "return";
                 return;
             }
             
@@ -129,7 +130,7 @@ class debug {
             register::$vars['coscms_debug']['memory_usage'] = memory_get_peak_usage(false);
 
         }
-        if ($ini['debug'] == 1){
+        if (get_module_ini('debug')){
             ob_start();
             
             $_COS_BENCH = array();
