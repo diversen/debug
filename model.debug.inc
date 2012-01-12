@@ -75,23 +75,6 @@ function html_show_array($array ){
 // }}}
 // {{{
 function html_show_debug_info(){
-    //echo "dennis" . $show_important = get_module_ini ('show_important');die;
-    //if (!$show_important){
-    //if (register::$vars['coscms_main']['show_creds'] == 0){
-    /*
-        unset(register::$vars['coscms_main']['url']);
-        unset(register::$vars['coscms_main']['username']);
-        unset(register::$vars['coscms_main']['password']);
-        unset(register::$vars['coscms_main']['ssh_port']);
-        unset(register::$vars['coscms_main']['ssh_host']);
-        unset(register::$vars['coscms_main']['smtp_params_password']);
-        unset(register::$vars['coscms_main']['development']['url']);
-        unset(register::$vars['coscms_main']['development']['username']);
-        unset(register::$vars['coscms_main']['development']['password']);
-        unset(register::$vars['coscms_main']['development']['ssh_port']);
-        unset(register::$vars['coscms_main']['development']['ssh_host']);
-        unset(register::$vars['coscms_main']['development']['smtp_params_password']);
-    //}*/
 
     if (config::$vars['coscms_main']['module']['debug'] == 1){
             html_show_array(array('sql_info' => db::getDebug()));
@@ -113,11 +96,11 @@ class debug {
     public function runLevel($level){
         $str = '';
         if ($level == 6){
-            //$do_debug = get_module_ini('debug');
+
             if (!config::getModuleIni('debug')){
-                echo "return";
                 return;
             }
+
             
             // fetch all GLOBALS for debug
             config::$vars['coscms_debug']['_SESSION'] = &$_SESSION;
