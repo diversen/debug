@@ -97,9 +97,11 @@ class debug {
         $str = '';
         
         if ($level == 6){
+
             if (!config::getModuleIni('debug')){
                 return;
             }
+
             
             // fetch all GLOBALS for debug
             config::$vars['coscms_debug']['_SESSION'] = &$_SESSION;
@@ -113,7 +115,7 @@ class debug {
 
         }
         
-        if (get_module_ini('debug')){
+        if (config::getModuleIni('debug')){
             ob_start();
             
             $_COS_BENCH = array();
@@ -125,7 +127,7 @@ class debug {
             print "<a name=\"benchmark\">Benchmark</a>";
             html_show_array($_COS_BENCH);
             print "<a name=\"main_settings\">Main Settings</a>";
-            if ($_SERVER['REMOTE_ADDR'] == get_module_ini('debug_allow_ip')){
+            if ($_SERVER['REMOTE_ADDR'] == config::getModuleIni('debug_allow_ip')){
                 html_show_array(config::$vars['coscms_main']);
                 print "<a name=\"module_settings\">Module Settings</a>";
                 html_show_array(config::$vars['coscms_main']['module']);
@@ -144,3 +146,4 @@ class debug {
         }
     }
 }
+
