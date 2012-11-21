@@ -1,2 +1,4 @@
+; enable debug
 debug = 1
+; show debug only from this IP
 debug_allow_ip = "127.0.0.1"

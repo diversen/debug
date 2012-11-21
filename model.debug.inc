@@ -76,9 +76,9 @@ function html_show_array($array ){
 // {{{
 function html_show_debug_info(){
 
-    if (register::$vars['coscms_main']['module']['debug'] == 1){
+    if (config::$vars['coscms_main']['module']['debug'] == 1){
             html_show_array(array('sql_info' => db::getDebug()));
-            html_show_array(register::$vars['coscms_debug']);
+            html_show_array(config::$vars['coscms_debug']);
     }
 }
 
@@ -95,30 +95,30 @@ class debug {
      */
     public function runLevel($level){
         $str = '';
+        
         if ($level == 6){
-            //$ini = moduleLoader::getModuleIniSettings('debug');
-            
-            if (!get_module_ini('debug')){
+            if (!config::getModuleIni('debug')){
                 return;
             }
             
             // fetch all GLOBALS for debug
-            register::$vars['coscms_debug']['_SESSION'] = &$_SESSION;
-            register::$vars['coscms_debug']['_POST'] = &$_POST;
-            register::$vars['coscms_debug']['_GET'] = &$_GET;
-            register::$vars['coscms_debug']['_FILES'] = &$_FILES;
-            register::$vars['coscms_debug']['_SERVER'] = &$_SERVER;
+            config::$vars['coscms_debug']['_SESSION'] = &$_SESSION;
+            config::$vars['coscms_debug']['_POST'] = &$_POST;
+            config::$vars['coscms_debug']['_GET'] = &$_GET;
+            config::$vars['coscms_debug']['_FILES'] = &$_FILES;
+            config::$vars['coscms_debug']['_SERVER'] = &$_SERVER;
             
             // debug speed of application
-            register::$vars['coscms_debug']['memory_usage'] = memory_get_peak_usage(false);
+            config::$vars['coscms_debug']['memory_usage'] = memory_get_peak_usage(false);
 
         }
+        
         if (get_module_ini('debug')){
             ob_start();
             
             $_COS_BENCH = array();
             $_COS_BENCH['memory_usage'] = memory_get_peak_usage(false);
-            $_COS_BENCH['timer']['start'] = register::$vars['coscms_debug']['timer']['start'];
+            $_COS_BENCH['timer']['start'] = config::$vars['coscms_debug']['timer']['start'];
             $_COS_BENCH['timer']['end'] = microtime(true);
             $_COS_BENCH['timer']['diff'] = $_COS_BENCH['timer']['end'] - $_COS_BENCH['timer']['start'] ;
 
@@ -126,9 +126,9 @@ class debug {
             html_show_array($_COS_BENCH);
             print "<a name=\"main_settings\">Main Settings</a>";
             if ($_SERVER['REMOTE_ADDR'] == get_module_ini('debug_allow_ip')){
-                html_show_array(register::$vars['coscms_main']);
+                html_show_array(config::$vars['coscms_main']);
                 print "<a name=\"module_settings\">Module Settings</a>";
-                html_show_array(register::$vars['coscms_main']['module']);
+                html_show_array(config::$vars['coscms_main']['module']);
             }
             
             print "<a name=\"sql\">SQL</a>";
@@ -139,6 +139,7 @@ class debug {
 
             $str = ob_get_contents();
             ob_end_clean();
+            ///echo $str;
             template::setEndContent($str);
         }
     }
