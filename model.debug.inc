@@ -6,15 +6,13 @@
  * @package    debug
  */
 
-// }}}
-// {{{ function do_offeset($level)
 /**
  * function for doing offset in a table
  *
  * @param   int     level
  * @return  string  offset
  */
-function do_offset($level){
+function debug_do_offset($level){
     $offset = "";
     for ($i=1; $i<$level;$i++){
         $offset = $offset . "<td id='tabledebug'></td>";
@@ -22,8 +20,6 @@ function do_offset($level){
     return $offset;
 }
 
-// }}}
-// {{{ function show_array($array, $level, $sub)
 /**
  * function for printing an array in a table
  *
@@ -33,19 +29,19 @@ function do_offset($level){
  * @return  void    return when finished
  */
 
-function show_array($array, $level, $sub){
+function debug_show_array($array, $level, $sub){
     if (is_array($array)){          // check if input is an array
        foreach($array as $key_val => $value) {
            $offset = "";
            if (is_array($value) == 1){   // array is multidimensional
                echo "<tr id='tabledebug'>";
-               $offset = do_offset($level);
+               $offset = debug_do_offset($level);
                echo $offset . "<td id='tabledebug'>" . $key_val . "</td>";
-               show_array($value, $level+1, 1);
+               debug_show_array($value, $level+1, 1);
            } else {                        // (sub)array is not multidim
                 if ($sub != 1){          // first entry for subarray
                     echo "<tr id='tabledebug'>";
-                    $offset = do_offset($level);
+                    $offset = debug_do_offset($level);
                 }
                 $sub = 0;
                 echo $offset . "<td id='tabledebug'>" . $key_val .
@@ -66,19 +62,42 @@ function show_array($array, $level, $sub){
  * @param   array   the array to create a html table from
  */
 
-function html_show_array($array ){
+function debug_show_array_div($array ){
     echo "<div id='tabledebug'><table>";
-    show_array($array, 1, 0);
+    debug_show_array($array, 1, 0);
     echo "</div></table>";
 }
 
-// }}}
-// {{{
-function html_show_debug_info(){
-
+function debug_set_template_end(){
+    
     if (config::$vars['coscms_main']['module']['debug'] == 1){
-            html_show_array(array('sql_info' => db::getDebug()));
-            html_show_array(config::$vars['coscms_debug']);
+            ob_start();
+            
+            $_COS_BENCH = array();
+            $_COS_BENCH['memory_usage'] = memory_get_peak_usage(false);
+            $_COS_BENCH['timer']['start'] = config::$vars['coscms_debug']['timer']['start'];
+            $_COS_BENCH['timer']['end'] = microtime(true);
+            $_COS_BENCH['timer']['diff'] = $_COS_BENCH['timer']['end'] - $_COS_BENCH['timer']['start'] ;
+
+            echo "<a name=\"benchmark\">Benchmark</a>";
+            debug_show_array_div($_COS_BENCH);
+            echo "<a name=\"main_settings\">Main Settings</a>";
+            if ($_SERVER['REMOTE_ADDR'] == config::getModuleIni('debug_allow_ip')){
+                debug_show_array_div(config::$vars['coscms_main']);
+                echo "<a name=\"module_settings\">Module Settings</a>";
+                debug_show_array_div(config::$vars['coscms_main']['module']);
+            }
+            
+            echo "<a name=\"sql\">SQL</a>";
+            debug_show_array_div(db::getDebug());
+
+            echo "<a name=\"server\">Server Info</a>";
+            debug_show_array_div($_SERVER);
+
+            $str = ob_get_contents();
+            ob_end_clean();
+            ///echo $str;
+            template::setEndContent($str);
     }
 }
 
@@ -125,19 +144,19 @@ class debug {
             $_COS_BENCH['timer']['diff'] = $_COS_BENCH['timer']['end'] - $_COS_BENCH['timer']['start'] ;
 
             print "<a name=\"benchmark\">Benchmark</a>";
-            html_show_array($_COS_BENCH);
+            debug_show_array_div($_COS_BENCH);
             print "<a name=\"main_settings\">Main Settings</a>";
             if ($_SERVER['REMOTE_ADDR'] == config::getModuleIni('debug_allow_ip')){
-                html_show_array(config::$vars['coscms_main']);
+                debug_show_array_div(config::$vars['coscms_main']);
                 print "<a name=\"module_settings\">Module Settings</a>";
-                html_show_array(config::$vars['coscms_main']['module']);
+                debug_show_array_div(config::$vars['coscms_main']['module']);
             }
             
             print "<a name=\"sql\">SQL</a>";
-            html_show_array(db::getDebug());
+            debug_show_array_div(db::getDebug());
 
             print "<a name=\"server\">Server Info</a>";
-            html_show_array($_SERVER);
+            debug_show_array_div($_SERVER);
 
             $str = ob_get_contents();
             ob_end_clean();
