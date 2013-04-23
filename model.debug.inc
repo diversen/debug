@@ -54,8 +54,6 @@ function debug_show_array($array, $level, $sub){
     }
 }
 
-// }}}
-// {{{ function html_show_array($array, $title)
 /**
  * function for showing a debug array in table, adding of divs
  *
@@ -63,9 +61,11 @@ function debug_show_array($array, $level, $sub){
  */
 
 function debug_show_array_div($array ){
-    echo "<div id='tabledebug'><table>";
+    echo "<div id=\"debug_table\">\n";
+    echo "<table>\n";
     debug_show_array($array, 1, 0);
-    echo "</div></table>";
+    echo "</table>\n";
+    echo "</div>\n";
 }
 
 function debug_set_template_end(){
@@ -79,19 +79,19 @@ function debug_set_template_end(){
             $_COS_BENCH['timer']['end'] = microtime(true);
             $_COS_BENCH['timer']['diff'] = $_COS_BENCH['timer']['end'] - $_COS_BENCH['timer']['start'] ;
 
-            echo "<a name=\"benchmark\">Benchmark</a>";
+            //echo "<a name=\"benchmark\">Benchmark</a>";
             debug_show_array_div($_COS_BENCH);
-            echo "<a name=\"main_settings\">Main Settings</a>";
+            //echo "<a name=\"main_settings\">Main Settings</a>";
             if ($_SERVER['REMOTE_ADDR'] == config::getModuleIni('debug_allow_ip')){
                 debug_show_array_div(config::$vars['coscms_main']);
                 echo "<a name=\"module_settings\">Module Settings</a>";
                 debug_show_array_div(config::$vars['coscms_main']['module']);
             }
             
-            echo "<a name=\"sql\">SQL</a>";
+            //echo "<a name=\"sql\">SQL</a>";
             debug_show_array_div(db::getDebug());
 
-            echo "<a name=\"server\">Server Info</a>";
+            //echo "<a name=\"server\">Server Info</a>";
             debug_show_array_div($_SERVER);
 
             $str = ob_get_contents();
