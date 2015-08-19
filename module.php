@@ -5,11 +5,15 @@ namespace modules\debug;
 use diversen\conf;
 use diversen\db;
 use diversen\template;
+use diversen\template\assets;
+use diversen\file\string as fileStr;
 
 /**
  * Primitive class for adding debug info
  * @package    debug
  */
+
+assets::setInlineCss(conf::pathModules() . '/debug/table.css');
 
 /**
  * Class adding primitive debug info
@@ -23,14 +27,14 @@ class module {
      */
     public function runLevel($level) {
 
-        echo $level;
-        if (!conf::getModuleIni('debug')) {
-            return;
+        $debug = conf::getMainIni('debug');
+        if (!$debug) {
+            return '';
         }
 
         ob_start();
         
-        echo '<a name="main" class="main">All Settings</a>';
+        echo '<a name="main" class="main">All ini Settings</a>';
         self::echoArrayDiv(conf::$vars['coscms_main'], 'debug-main');
                 
         echo '<a name="modules" class="modules">Only Module Settings</a>';
@@ -42,7 +46,22 @@ class module {
         echo '<a name="server" class="server">Server Info</a>';
         self::echoArrayDiv($_SERVER, 'debug-server');
 
-        //print_r(conf::$vars);
+        echo '<a name="get" class="get">$_GET</a>';
+        self::echoArrayDiv($_GET, 'debug-get');
+        
+        echo '<a name="post" class="post">$_POST</a>';
+        self::echoArrayDiv($_POST, 'debug-post');
+        
+        echo '<a name="cookie" class="cookie">$_COOKIE</a>';
+        self::echoArrayDiv($_COOKIE, 'debug-cookie');
+        
+        $error_file = conf::pathBase() . "/logs/error.log";
+        if (file_exists($error_file)) {
+            $log = fileStr::getTail($error_file, 10);
+        }
+        echo '<a name="log" class="log">Error log</a>';
+        self::echoArrayDiv($log, 'debug-log');
+        
         ?>
 <script>
 
@@ -51,15 +70,31 @@ $( ".main" ).click(function() {
 });
 
 $( ".modules" ).click(function() {
-  $( ".debug-modules" ).toggle( "slow" );
+  $( ".debug-modules" ).toggle( );
 });
 
 $( ".sql" ).click(function() {
-  $( ".debug-sql" ).toggle( "slow" );
+  $( ".debug-sql" ).toggle();
 });
 
 $( ".server" ).click(function() {
-  $( ".debug-server" ).toggle( "slow" );
+  $( ".debug-server" ).toggle( );
+});
+
+$( ".get" ).click(function() {
+  $( ".debug-get" ).toggle( );
+});
+
+$( ".post" ).click(function() {
+  $( ".debug-post" ).toggle( );
+});
+
+$( ".cookie" ).click(function() {
+  $( ".debug-cookie" ).toggle( );
+});
+
+$( ".log" ).click(function() {
+  $( ".debug-log" ).toggle( );
 });
 
 </script><?php
@@ -129,7 +164,7 @@ $( ".server" ).click(function() {
      * @param   array   the array to create a html table from
      */
     public static function echoArrayDiv($array, $class) {
-        echo '<div class="' . $class . '" style="display: none">';
+        echo '<div class="debug-table ' . $class . '" style="display: none">';
         echo "<table>\n";
         self::displayArray($array, 1, 0);
         echo "</table>\n";

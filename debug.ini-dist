@@ -1,5 +1,1 @@
-; enable debug
-debug = 1
-; only show important info to this IP (e.g. database settings etc.)
-debug_allow_ip = '127.0.0.1'
 
