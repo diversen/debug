@@ -57,7 +57,7 @@ class module {
         
         $error_file = conf::pathBase() . "/logs/error.log";
         if (file_exists($error_file)) {
-            $log = fileStr::getTail($error_file, 10);
+            $log = array_reverse(fileStr::getTail($error_file, 10));
         }
         echo '<a name="log" class="log">Error log</a>';
         self::echoArrayDiv($log, 'debug-log');
