@@ -32,6 +32,7 @@ div.debug-table table {
 	-webkit-box-shadow: 0 1px 2px #d1d1d1;
 	box-shadow: 0 1px 2px #d1d1d1;
 	width: 100%;
+        display: block;
 }
 div.debug-table table th {
 	padding:21px 25px 22px 25px;

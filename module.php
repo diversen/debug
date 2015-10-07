@@ -13,7 +13,7 @@ use diversen\file\string as fileStr;
  * @package    debug
  */
 
-assets::setInlineCss(conf::pathModules() . '/debug/table.css');
+//assets::setInlineCss(conf::pathModules() . '/debug/table.css');
 
 /**
  * Class adding primitive debug info
@@ -34,7 +34,7 @@ class module {
 
         ob_start();
         
-        echo '<a name="main" class="main">All ini Settings</a>';
+        echo '<a name="main-settings" class="main-settings">All ini Settings</a>';
         self::echoArrayDiv(conf::$vars['coscms_main'], 'debug-main');
                 
         echo '<a name="modules" class="modules">Only Module Settings</a>';
@@ -65,7 +65,7 @@ class module {
         ?>
 <script>
 
-$( ".main" ).click(function() {
+$( ".main-settings" ).click(function() {
   $( ".debug-main" ).toggle();
 });
 
