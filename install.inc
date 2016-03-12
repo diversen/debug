@@ -1,4 +1,4 @@
 <?php
 
 // Install file
-$_INSTALL['RUN_LEVEL'] = "7";
+$_INSTALL['RUN_LEVEL'] = "1,7";
