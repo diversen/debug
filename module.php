@@ -6,7 +6,7 @@ use diversen\conf;
 use diversen\db\admin;
 use diversen\db\connect;
 use diversen\db\q;
-use diversen\file\string as fileStr;
+use diversen\file\strings;
 use diversen\template;
 use diversen\profile;
 
@@ -83,7 +83,7 @@ class module {
         
         $error_file = conf::pathBase() . "/logs/error.log";
         if (file_exists($error_file)) {
-            $log = array_reverse(fileStr::getTail($error_file, 10));
+            $log = array_reverse(strings::getTail($error_file, 10));
         }
         echo '<a name="log" class="log">Error log</a>';
         self::echoArrayDiv($log, 'debug-log');
