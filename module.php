@@ -20,7 +20,7 @@ class module {
      * @return boolean $res
      */
     public function isMySQL () {
-        $info = admin::getDbInfo();
+        $info = admin::getDbInfo(conf::getMainIni('url'));
         if ($info['scheme'] == 'mysql' OR $info['scheme'] == 'mysqli') {
             return true;
         }
